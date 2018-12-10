@@ -1,0 +1,36 @@
+# This pylintrc file will use the default settings except for the
+# naming conventions, which will allow for camel case naming as found
+# in Java code or several libraries such as PyQt, etc.
+
+[BASIC]
+# Regular expression which should only match correct module names
+module-rgx=(([a-z][a-z0-9]*)|([A-Z][a-zA-Z0-9]+))$
+
+# Regular expression which should only match correct class names
+class-rgx=[A-Z][a-zA-Z0-9]+$
+
+# Regular expression which should only match correct function names
+function-rgx=[a-z_][a-zA-Z0-9]*$
+
+# Regular expression which should only match correct method names
+method-rgx=[a-z_][a-zA-Z0-9]*$
+
+# Regular expression which should only match correct argument names
+argument-rgx=[a-z][a-zA-Z0-9]*$
+
+# Regular expression which should only match correct variable names
+variable-rgx=[a-z][a-zA-Z0-9]*$
+
+[DESIGN]
+max-locals=25
+max-branches=25
+max-attributes=25
+min-public-methods=0
+
+[FORMAT]
+# String used as indentation unit. This is usually " " (3 spaces) or "\t" (1
+# tab).
+indent-string='   '
+
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren=3

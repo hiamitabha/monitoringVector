@@ -1,0 +1,37 @@
+README
+=====
+
+This is a program to monitor Anki Vector and send data to VMware Wavefront.
+Wavefront is an extremely powerful tool that can be used to ingest time-series
+data and visualize it through the Wavefront UI.
+
+These programs are released under the conditions Apache License, Version 2.0.
+You may obtain a copy of the License in the file LICENSE.txt or at
+http://www.apache.org/licenses/LICENSE-2.0
+
+REQUIREMENTS:
+============
+To use this program, you need the following:
+1. Anki Vector
+2. Anki Vector SDK. As of 12/10/2018, the SDK is available in a pre-alpha
+release only to Kickstarter backers of Anki Vector
+3. A Wavefront account. You can get a trial account for 30 days at
+www.wavefront.com
+
+
+HOW TO USE:
+==========
+1. Create an account with Wavefront at www.wavefront.com with your email
+address.
+2. Install a wvefront proxy on your local machine or some other machine using
+instructions at Wavefront. If you do not install the proxy on your local
+machine, please change the proxy IP in wavefrontAgent.py
+3. Run the program: python3 monitor.py
+4. Once data has been collected for some time, you can view it at Wavefront.
+Go to Browse->Metrics on the Wavefront dashboard, and you will find the
+metrics. Click on the metrics to explore time series data.
+
+EXAMPLES:
+========
+An example on how the datapoints may be useful can be found at:
+https://medium.com/@hiamitabha/monitoring-anki-vector-24x7-with-wavefront-dd5a2ddb9378?source=friends_link&sk=57d38dbd49773ca0f038b31e20cdf5d2
