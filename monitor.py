@@ -30,37 +30,35 @@ def getStates(status):
       @return List of states
    """
    result = []
-   IS_MOVING = (0x1, 'IS_MOVING')
-   IS_CARRYING_BLOCK = (0x2, 'IS_CARRYING_BLOCK')
-   IS_PICKING_OR_PLACING = (0x4, 'IS_PICKING_OR_PLACING')
-   IS_PICKED_UP = (0x8, 'IS_PICKED_UP')
-   IS_BUTTON_PRESSED = (0x10, 'IS_BUTTON_PRESSED')
-   IS_FALLING = (0x20, 'IS_FALLING')
-   IS_ANIMATING = (0x40, 'IS_ANIMATING')
-   IS_PATHING = (0x80, 'IS_PATHING')
-   LIFT_IN_POS = (0x100, 'LIFT_IN_POS')
-   HEAD_IN_POS = (0x200, 'HEAD_IN_POS')
-   CALM_POWER_MODE = (0x400, 'CALM_POWER_MODE')
-   IS_BATTERY_DISCONNECTED = (0x800, 'IS_BATTERY_DISCONNECTED')
-   IS_ON_CHARGER = (0x1000, 'IS_ON_CHARGER')
-   IS_CHARGING = (0x2000, 'IS_CHARGING')
-   CLIFF_DETECTED = (0x4000, 'CLIFF_DETECTED')
-   ARE_WHEELS_MOVING = (0x8000, 'ARE_WHEELS_MOVING')
-   IS_BEING_HELD = (0x10000, 'IS_BEING_HELD')
-   IS_MOTION_DETECTED = (0x20000, 'IS_MOTION_DETECTED')
-   IS_BATTERY_OVERHEATED = (0x40000, 'IS_BATTERY_OVERHEATED')
 
-   checkList = [IS_MOVING, IS_CARRYING_BLOCK, IS_PICKING_OR_PLACING,
-                IS_PICKED_UP, IS_BUTTON_PRESSED, IS_FALLING, IS_ANIMATING,
-                IS_PATHING, LIFT_IN_POS, HEAD_IN_POS, CALM_POWER_MODE,
-                IS_BATTERY_DISCONNECTED, IS_ON_CHARGER, IS_CHARGING,
-                CLIFF_DETECTED, ARE_WHEELS_MOVING,
-                IS_BEING_HELD, IS_MOTION_DETECTED, IS_BATTERY_OVERHEATED]
-
-   if status is not None:
-      for check in checkList:
-         if (status & check[0]):
-            result.append(check[1])
+   if status.are_motors_moving:
+      result.append('MOTOR_MOVING')
+   if status.are_wheels_moving:
+      result.append('WHEEL_MOVING')
+   if status.is_animating:
+      result.append('IS_ANIMATING')
+   if status.is_being_held:
+      result.append('IS_BEING_HELD')
+   if status.is_carrying_block:
+      result.append('IS_CARRYING_BLOCK')
+   if status.is_charging:
+      result.append('IS_CHARGING')
+   if status.is_docking_to_marker:
+      result.append('IS_DOCKING_TO_MARKER')
+   if status.is_falling:
+      result.append('IS_FALLING')
+   if status.is_in_calm_power_mode:
+      result.append('IS_IN_CALM_POWER_MODE')
+   if status.is_lift_in_pos:
+      result.append('IS_LIFT_ON_POS')
+   if status.is_on_charger:
+      result.append('IS_ON_CHARGER')
+   if status.is_pathing:
+      result.append('IS_PATHING')
+   if status.is_picked_up:
+      result.append('IS_PICKED_UP')
+   if status.is_robot_moving:
+      result.append('IS_ROBOT_MOVING')
    return result
 
 def createWavefrontAgent(kvDict):
@@ -137,7 +135,7 @@ def main():
          is_being_touched = touch_data.is_being_touched
       else:
          (is_being_touched, raw_touch_value) = (None, None)
-      lastValidSensorReading = robot.proximity.last_valid_sensor_reading
+      lastValidSensorReading = robot.proximity.last_sensor_reading
       if lastValidSensorReading:
          obstacleDistance = lastValidSensorReading.distance.distance_mm
       else:
