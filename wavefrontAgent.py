@@ -96,7 +96,7 @@ class WavefrontAgent:
       self.wavefrontStream = []
       self.datetimeStr = timestamp.strftime('%s')
 
-   def appendToStream(self, metric, value, tags=None):
+   def appendToStream(self, metric, value, source=None, tags=None):
       """
          Creates a new string in the format that Wavefront accepts and
          appends it to wavefrontStream
@@ -105,11 +105,13 @@ class WavefrontAgent:
          @param tags Optional tags that a metric/value can be associated with
          in wavefront
       """
-      if value is not None:
+      if value:
+         if not source:
+            source = _WAVEFRONT_SOURCE
          wavefrontStr = '%s %f %s source=%s' % (metric,
                                                 value,
                                                 self.datetimeStr,
-                                                _WAVEFRONT_SOURCE)
+                                                source)
          if tags is not None:
             wavefrontStr += tags
          self.wavefrontStream.append(wavefrontStr)

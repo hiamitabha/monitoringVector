@@ -18,6 +18,7 @@ import anki_vector
 import datetime
 import time
 import math
+import argparse
 
 from wavefrontAgent import WavefrontAgent
 
@@ -61,7 +62,7 @@ def getStates(status):
       result.append('IS_ROBOT_MOVING')
    return result
 
-def createWavefrontAgent(kvDict):
+def createWavefrontAgent(kvDict, source=None):
    """
       Creates a Wavefrom Agent using an input key-value dictionary
       All data in this input key-value dictionary will be transmitted to
@@ -72,7 +73,7 @@ def createWavefrontAgent(kvDict):
    localTime = datetime.datetime.now()
    wavefrontAgent = WavefrontAgent(localTime)
    for key, value in kvDict.items():
-      wavefrontAgent.appendToStream(key, value)
+      wavefrontAgent.appendToStream(key, value, source)
    return wavefrontAgent
 
 def getDistanceTravelled(previousPose, currentPose):
@@ -87,9 +88,22 @@ def getDistanceTravelled(previousPose, currentPose):
                         (curPosition.z - prevPosition.z)**2)
    return distance
 
+def parse():
+   parser = argparse.ArgumentParser()
+   parser.add_argument("-s", "--serial",
+                       help="Serial Number",
+                       default=None)
+   args = parser.parse_args()
+   return args
+
 def main():
-   args = anki_vector.util.parse_command_args()
-   robot = anki_vector.Robot()
+   args = parse()
+   serial = args.serial
+   if serial:
+      robot = anki_vector.Robot(serial)
+   else:
+      robot = anki_vector.Robot()
+
    previousPose = None
    print ("Starting to monitor vector. Ctrl-C to exit monitoring")
    while True:
@@ -159,14 +173,14 @@ def main():
          dataValDict['vector.accel.x'] = x
          dataValDict['vector.accel.y'] = y
          dataValDict['vector.accel.z'] = z
-      wavefrontAgent = createWavefrontAgent(dataValDict)
+      wavefrontAgent = createWavefrontAgent(dataValDict, source=serial)
       stateList = getStates(status)
       if len(stateList) > 0:
          dataValDict['vector.currentstate'] = 1
          tag = ""
          for state in stateList:
             tag += ' %s=1' %(state)
-         wavefrontAgent.appendToStream('vector.currentstate', 1, tag)
+         wavefrontAgent.appendToStream('vector.currentstate', 1, source=serial, tags=tag)
       wavefrontAgent.sendWithThrottle()
       try:
          robot.disconnect()
